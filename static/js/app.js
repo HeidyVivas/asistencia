@@ -133,6 +133,11 @@ function loadAprendices() {
 // Cargar Asistencias
 function loadAsistencias() {
     const content = document.getElementById('content');
+    
+    // Obtener fecha de hoy en formato YYYY-MM-DD
+    const hoy = new Date();
+    const fechaMax = hoy.toISOString().split('T')[0];
+    
     content.innerHTML = `
         <div class="card">
             <h2>✓ Asistencias</h2>
@@ -145,7 +150,7 @@ function loadAsistencias() {
                 </div>
                 <div class="form-group">
                     <label for="fecha">Fecha:</label>
-                    <input type="date" id="fecha" required>
+                    <input type="date" id="fecha" max="${fechaMax}" required>
                 </div>
                 <div class="form-group">
                     <label for="estado">Estado:</label>
@@ -173,6 +178,11 @@ function loadAsistencias() {
 // Cargar Faltas
 function loadFaltas() {
     const content = document.getElementById('content');
+    
+    // Obtener fecha de hoy en formato YYYY-MM-DD
+    const hoy = new Date();
+    const fechaMax = hoy.toISOString().split('T')[0];
+    
     content.innerHTML = `
         <div class="card">
             <h2>✗ Faltas</h2>
@@ -185,7 +195,7 @@ function loadFaltas() {
                 </div>
                 <div class="form-group">
                     <label for="falta-fecha">Fecha de Falta:</label>
-                    <input type="date" id="falta-fecha" required>
+                    <input type="date" id="falta-fecha" max="${fechaMax}" required>
                 </div>
                 <div class="form-group">
                     <label for="es-tardanza">¿Es tardanza?</label>
@@ -304,6 +314,16 @@ async function createAsistencia() {
         return;
     }
     
+    // VALIDACIÓN: Rechazar fechas en el futuro
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const fecha_ingresada = new Date(fecha);
+    
+    if (fecha_ingresada > hoy) {
+        showAlert('❌ No se puede registrar una asistencia en una fecha futura.\nFecha ingresada: ' + fecha + '\nHoy: ' + hoy.toISOString().split('T')[0], 'error');
+        return;
+    }
+    
     console.log('Enviando asistencia:', { aprendiz: parseInt(aprendiz), fecha, estado });
     
     try {
@@ -335,16 +355,16 @@ async function createAsistencia() {
         }
         
         if (response.ok) {
-            showAlert('Asistencia registrada correctamente', 'success');
+            showAlert('✓ Asistencia registrada correctamente', 'success');
             document.getElementById('asistenciaForm').reset();
             fetchAsistencias();
         } else {
             console.error('Error:', responseData);
-            showAlert('Error: ' + JSON.stringify(responseData), 'error');
+            showAlert('❌ Error: ' + (responseData.error || JSON.stringify(responseData)), 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        showAlert('Error: ' + error.message, 'error');
+        showAlert('❌ Error: ' + error.message, 'error');
     }
 }
 
@@ -366,6 +386,16 @@ async function createFalta() {
     const fecha_falta = document.getElementById('falta-fecha').value;
     const es_tardanza = document.getElementById('es-tardanza').checked;
     
+    // VALIDACIÓN: Rechazar fechas en el futuro
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const fecha_ingresada = new Date(fecha_falta);
+    
+    if (fecha_ingresada > hoy) {
+        showAlert('❌ No se puede registrar una falta en una fecha futura.\nFecha ingresada: ' + fecha_falta + '\nHoy: ' + hoy.toISOString().split('T')[0], 'error');
+        return;
+    }
+    
     try {
         const response = await fetch(`${API_BASE}/faltas/`, {
             method: 'POST',
@@ -381,16 +411,16 @@ async function createFalta() {
         });
         
         if (response.ok) {
-            showAlert('Falta registrada correctamente', 'success');
+            showAlert('✓ Falta registrada correctamente', 'success');
             document.getElementById('faltaForm').reset();
             fetchFaltas();
         } else {
             const data = await response.json();
-            showAlert('Error: ' + JSON.stringify(data), 'error');
+            showAlert('❌ Error: ' + (data.error || JSON.stringify(data)), 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        showAlert('Error de conexión', 'error');
+        showAlert('❌ Error de conexión', 'error');
     }
 }
 
