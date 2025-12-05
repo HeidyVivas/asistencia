@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Asistencia</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .box { padding: 15px; background: #eee; border-radius: 10px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border-bottom: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+
+<h1>Dashboard de Asistencia</h1>
+
+<div class="box">
+    <p>Total de faltas: <b>{{ total_faltas }}</b></p>
+    <p>Tardanzas: <b>{{ tardanzas }}</b></p>
+    <p>Faltas sin excusa: <b>{{ sin_excusa }}</b></p>
+</div>
+
+<h2>Listado</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Aprendiz</th>
+            <th>Fecha</th>
+            <th>Tardanza</th>
+            <th>Fecha límite excusa</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for f in faltas %}
+        <tr>
+            <td>{{ f.aprendiz.username }}</td>
+            <td>{{ f.fecha_falta }}</td>
+            <td>{{ f.es_tardanza }}</td>
+            <td>{{ f.fecha_limite_excusa }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

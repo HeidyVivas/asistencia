@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Asistencia - ADSO</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Sistema de Gestión de Asistencia</h1>
+            <p>Administra asistencias, faltas, excusas y reglamento de forma fácil y rápida</p>
+            
+            <div class="nav-menu">
+                <button class="active" data-section="dashboard">📊 Dashboard</button>
+                <button data-section="aprendices">👥 Aprendices</button>
+                <button data-section="asistencias">✓ Asistencias</button>
+                <button data-section="faltas">✗ Faltas</button>
+                <button data-section="excusas">📄 Excusas</button>
+                <button data-section="reglamento">📋 Reglamento</button>
+            </div>
+        </header>
+
+        <div id="content" class="content">
+            <!-- El contenido se cargará dinámicamente aquí -->
+        </div>
+    </div>
+
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

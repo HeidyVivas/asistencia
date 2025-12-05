@@ -6,6 +6,20 @@ from .serializers import FaltaSerializer, ExcusaSerializer
 
 import datetime
 
+def dashboard(request):
+    total_faltas = Falta.objects.count()
+    tardanzas = Falta.objects.filter(es_tardanza=True).count()
+    sin_excusa = Falta.objects.filter(fecha_limite_excusa__isnull=True).count()
+
+    context = {
+        'total_faltas': total_faltas,
+        'tardanzas': tardanzas,
+        'sin_excusa': sin_excusa,
+        'faltas': Falta.objects.all()
+    }
+    return render(request, 'dashboard.html', context)
+
+
 class FaltaViewSet(viewsets.ModelViewSet):
     queryset = Falta.objects.all()
     serializer_class = FaltaSerializer

@@ -25,12 +25,26 @@ SECRET_KEY = 'django-insecure-6wq6p!yb-hwr5czp^lt_2oc$5-g$5*7%b5_eh+2yc4wv6zj$n+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+AUTH_USER_MODEL = 'usuarios.Usuario'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # libs
+    'rest_framework',
+    # tus apps
+    'core',
+    'usuarios',
+    'reglamento',
+    'asistencias',
+    'faltas',
+    'excusas',
+    # django contrib...
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,11 +52,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+
 # Third-party and local apps
-INSTALLED_APPS += [
-    'rest_framework',
-    'asistencia_api',
-]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -59,7 +72,7 @@ ROOT_URLCONF = 'asistencia_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -120,6 +133,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Media (archivos subidos por usuarios)
 MEDIA_URL = '/media/'
@@ -131,6 +145,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.AllowAny',
     ),
 }
+
